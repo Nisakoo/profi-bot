@@ -3,7 +3,7 @@ import asyncio
 
 from dotenv import load_dotenv
 
-from bot.telegram_bot import TelegramBot
+from bot.telegram.bot import TelegramBot
 from neural_network.gigachat import GigaChatNeuralNetwork
 from db.sqlite3_db import Sqlite3DataBase
 

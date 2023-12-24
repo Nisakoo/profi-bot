@@ -5,24 +5,31 @@ from langchain.chat_models.gigachat import GigaChat
 
 from neural_network.base_neural_network import BaseNeuralNetwork
 
+from neural_network.constants.prompts import *
+
 
 class GigaChatNeuralNetwork(BaseNeuralNetwork):
     def __init__(self, auth_key: str) -> None:
         super().__init__(auth_key)
 
         self._gigachat = GigaChat(
-            credentials=self._auth_key
+            credentials=self._auth_key,
+            verify_ssl_certs=False
         )
 
     async def ask_question(self, messages: list) -> str:
-        raise NotImplementedError("Добавить systeam message для ask_question")
+        prompts = messages.copy()
 
-        return (await self._chat.ainvoke(messages)).content
+        prompts.insert(0, SystemMessage(content=ASK_QUESTION_SYSTEM_PROMPT))
+        prompts.append(HumanMessage(content=ASK_NEXT_QUESTION_PROMPT))
+
+        return (await self._gigachat.ainvoke(prompts)).content
     
     async def ask_result(self, messages: list) -> str:
-        raise NotImplementedError("Добавить systeam message для ask_result")
+        prompts = messages.copy()
+        prompts.insert(0, SystemMessage(content=SHOW_RESULT_SYSTEM_PROMPT))
 
-        return (await self._chat.ainvoke(messages)).content
+        return (await self._gigachat.ainvoke(prompts)).content
     
     def user_msg(self, prompt: str) -> Any:
         return HumanMessage(content=prompt)
