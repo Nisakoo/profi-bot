@@ -154,3 +154,6 @@ cython_debug/
 # Ignore database file and csv files
 *.db
 data.csv
+
+# Log files
+*.log

@@ -1,6 +1,9 @@
 import os
 import asyncio
 
+import logging_config
+import logging
+
 from dotenv import load_dotenv
 
 from bot.telegram.bot import TelegramBot
