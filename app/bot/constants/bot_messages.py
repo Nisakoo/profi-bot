@@ -29,5 +29,14 @@ def prof_test_result_message(result_content: str) -> str:
 def stop_prof_test_message() -> str:
     return STOP_PROF_TEST_MESSAGE
 
+def good_feedback_message() -> str:
+    return GOOD_FEEDBACK_MESSAGE
+
+def bad_feedback_message() -> str:
+    return BAD_FEEDBACK_MESSAGE
+
+def feedback_thanks_message() -> str:
+    return FEEDBACK_THANKS_MESSAGE
+
 def error_occur_message() -> str:
     return ERROR_OCCUR_MESSAGE

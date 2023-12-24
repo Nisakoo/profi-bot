@@ -66,10 +66,30 @@ class TelegramBot(BaseBot):
         )
 
         self._app.add_handler(CommandHandler(["start", "hello", "help"], self._start))
+        self._app.add_handler(CallbackQueryHandler(
+            self._feedback_callback,
+            pattern="|".join([
+                QUESTION_GOOD_FEEDBACk_CD,
+                QUESTION_BAD_FEEDBACk_CD,
+                RESULT_GOOD_FEEDBACk_CD,
+                RESULT_BAD_FEEDBACk_CD
+            ])
+        ))
         self._app.add_handler(prof_test_conv_handler)
 
     @typing_status
     @send_user_error_message
+    async def _feedback_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        """ Записывает отзыв пользователя на сообщение бота в базу данных. """
+        query = update.callback_query
+
+        await query.answer()
+        await query.edit_message_reply_markup(None)
+        await update.effective_user.send_message(feedback_thanks_message())
+
+    @typing_status
+    @send_user_error_message
+    @write_event_to_db("start_test")
     async def _start_prof_test(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         """ Начало профориентационного теста. """
         user = update.effective_user
@@ -81,8 +101,8 @@ class TelegramBot(BaseBot):
         await user.send_message(start_prof_test_message(
             self._data.get_question_number(user.id),
             QUESTIONS_COUNT,
-            response
-        ))
+            response,
+        ), reply_markup=QUESTION_FEEDBACK_KEYBOARD)
         self._data.next_question(user.id)
 
         return QUESTION_STATE
@@ -95,6 +115,7 @@ class TelegramBot(BaseBot):
     
     @typing_status
     @send_user_error_message
+    @write_event_to_db("ask_question")
     async def _prof_test_question(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         """ Обработчик ответов пользователя во время профориентационного теста. """
         user = update.effective_user
@@ -112,19 +133,21 @@ class TelegramBot(BaseBot):
             self._data.get_question_number(user.id),
             QUESTIONS_COUNT,
             response
-        ))
+        ), reply_markup=QUESTION_FEEDBACK_KEYBOARD)
         self._data.next_question(user.id)
 
         return QUESTION_STATE
     
     @typing_status
     @send_user_error_message
+    @write_event_to_db("stop_test")
     async def _prof_test_stop(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         """ Обработчик команды /stop - останавливает профориентационный тест. """
         await update.effective_user.send_message(stop_prof_test_message())
         return await self._prof_test_end(update, context)
     
     @send_user_error_message
+    @write_event_to_db("restart_test")
     async def _prof_test_restart(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         """ Обработчик команды /restart - перезапускает профориентационный тест. """
         await self._prof_test_end(update, context)
@@ -132,13 +155,15 @@ class TelegramBot(BaseBot):
     
     @typing_status
     @send_user_error_message
+    @write_event_to_db("show_test_result")
     async def _prof_test_result(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         """ Вывод результат профориентационного теста. """
         user = update.effective_user
 
         response = await self._neural_network.ask_result(self._data.get_messages(user.id))
         await user.send_message(
-            prof_test_result_message(response)
+            prof_test_result_message(response),
+            reply_markup=RESULT_FEEDBACK_KEYBOARD
         )
 
         return await self._prof_test_end(update, context)
@@ -151,6 +176,7 @@ class TelegramBot(BaseBot):
 
     @typing_status
     @send_user_error_message
+    @write_event_to_db("show_start_message")
     async def _start(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         """ Обработчик команд: start, hello, help """
         await update.effective_user.send_message(

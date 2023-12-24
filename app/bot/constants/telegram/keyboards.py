@@ -29,3 +29,33 @@ START_KEYBOARD = InlineKeyboardMarkup(
         )]
     ]
 )
+
+RESULT_FEEDBACK_KEYBOARD = InlineKeyboardMarkup(
+    [
+        [
+            InlineKeyboardButton(
+                good_feedback_message(),
+                callback_data=RESULT_GOOD_FEEDBACk_CD
+            ),
+            InlineKeyboardButton(
+                bad_feedback_message(),
+                callback_data=RESULT_BAD_FEEDBACk_CD
+            )
+        ]
+    ]
+)
+
+QUESTION_FEEDBACK_KEYBOARD = InlineKeyboardMarkup(
+    [
+        [
+            InlineKeyboardButton(
+                good_feedback_message(),
+                callback_data=QUESTION_GOOD_FEEDBACk_CD
+            ),
+            InlineKeyboardButton(
+                bad_feedback_message(),
+                callback_data=QUESTION_BAD_FEEDBACk_CD
+            )
+        ]
+    ]
+)

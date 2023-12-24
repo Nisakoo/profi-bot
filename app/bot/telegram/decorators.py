@@ -40,5 +40,17 @@ def send_user_error_message(func):
         except Exception as e:
             print(e)
             await update.effective_chat.send_message(error_occur_message())
+            await self._prof_test_end(update, context)
 
     return inner
+
+def write_event_to_db(event: str):
+
+    def decorator(func):
+
+        @wraps(func)
+        async def inner(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+            return await func(self, update, context)
+    
+        return inner
+    return decorator
