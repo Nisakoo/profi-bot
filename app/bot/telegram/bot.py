@@ -65,7 +65,7 @@ class TelegramBot(BaseBot):
             ]
         )
 
-        self._app.add_handler(CommandHandler(["start", "hello", "help"], self._start))
+        self._app.add_handler(CommandHandler(["start", "hello", "help", "about"], self._start))
         self._app.add_handler(CallbackQueryHandler(
             self._feedback_callback,
             pattern="|".join([
