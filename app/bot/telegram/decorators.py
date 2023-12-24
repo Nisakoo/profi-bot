@@ -50,6 +50,11 @@ def write_event_to_db(event: str):
 
         @wraps(func)
         async def inner(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+            await self._db.insert(
+                user_id=update.effective_user.id,
+                event=event,
+                message=""
+            )
             return await func(self, update, context)
     
         return inner

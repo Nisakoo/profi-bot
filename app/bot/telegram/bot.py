@@ -87,6 +87,12 @@ class TelegramBot(BaseBot):
         await query.edit_message_reply_markup(None)
         await update.effective_user.send_message(feedback_thanks_message())
 
+        await self._db.insert(
+            user_id=update.effective_user.id,
+            event=query.data,
+            message=query.message.text
+        )
+
     @typing_status
     @send_user_error_message
     @write_event_to_db("start_test")
