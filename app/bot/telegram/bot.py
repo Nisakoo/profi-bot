@@ -78,7 +78,11 @@ class TelegramBot(BaseBot):
         response = await self._neural_network.ask_question(self._data.get_messages(user.id))
         self._data.add_message(user.id, self._neural_network.agent_msg(response))
 
-        await user.send_message(response)
+        await user.send_message(start_prof_test_message(
+            self._data.get_question_number(user.id),
+            QUESTIONS_COUNT,
+            response
+        ))
         self._data.next_question(user.id)
 
         return QUESTION_STATE
@@ -104,7 +108,11 @@ class TelegramBot(BaseBot):
         response = await self._neural_network.ask_question(self._data.get_messages(user.id))
         self._data.add_message(user.id, self._neural_network.agent_msg(response))
 
-        await user.send_message(response)
+        await user.send_message(prof_test_question_message(
+            self._data.get_question_number(user.id),
+            QUESTIONS_COUNT,
+            response
+        ))
         self._data.next_question(user.id)
 
         return QUESTION_STATE
@@ -113,13 +121,14 @@ class TelegramBot(BaseBot):
     @send_user_error_message
     async def _prof_test_stop(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         """ Обработчик команды /stop - останавливает профориентационный тест. """
-        return ConversationHandler.END
+        await update.effective_user.send_message(stop_prof_test_message())
+        return await self._prof_test_end(update, context)
     
-    @typing_status
     @send_user_error_message
     async def _prof_test_restart(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         """ Обработчик команды /restart - перезапускает профориентационный тест. """
-        return ConversationHandler.END
+        await self._prof_test_end(update, context)
+        return await self._start_prof_test(update, context)
     
     @typing_status
     @send_user_error_message
@@ -129,15 +138,15 @@ class TelegramBot(BaseBot):
 
         response = await self._neural_network.ask_result(self._data.get_messages(user.id))
         await user.send_message(
-            response
+            prof_test_result_message(response)
         )
 
-        return ConversationHandler.END
+        return await self._prof_test_end(update, context)
     
-    @typing_status
     @send_user_error_message
     async def _prof_test_end(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         """ Метод для правильного завершения профориентационно теста. """
+        del self._data[update.effective_user.id]
         return ConversationHandler.END
 
     @typing_status
