@@ -35,9 +35,10 @@ if __name__ == "__main__":
     try:
         args = sys.argv
 
-        if (len(args) == 1) or (args[1] == "console"):
-            asyncio.run(send_commands(os.environ["DATABASE_FILE"]))
-        elif (len(args) == 2) and (args[1] == "csv"):
-            asyncio.run(db_to_csv(os.environ["DATABASE_FILE"]))
+        if len(args) == 2:
+            if args[1] == "console":
+                asyncio.run(send_commands(os.environ["DATABASE_FILE"]))
+            elif args[1] == "csv":
+                asyncio.run(db_to_csv(os.environ["DATABASE_FILE"]))
     finally:
         print("\n\nBye.")
