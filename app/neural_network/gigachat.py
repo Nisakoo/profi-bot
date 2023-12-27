@@ -14,20 +14,23 @@ class GigaChatNeuralNetwork(BaseNeuralNetwork):
 
         self._gigachat = GigaChat(
             credentials=self._auth_key,
-            verify_ssl_certs=False
+            verify_ssl_certs=False,
+            temperature=1.0
         )
 
     async def ask_question(self, messages: list) -> str:
         prompts = messages.copy()
 
         prompts.insert(0, SystemMessage(content=ASK_QUESTION_SYSTEM_PROMPT))
-        prompts.append(HumanMessage(content=ASK_NEXT_QUESTION_PROMPT))
+        prompts.insert(1, HumanMessage(content=ASK_NEXT_QUESTION_PROMPT))
 
         return (await self._gigachat.ainvoke(prompts)).content
     
     async def ask_result(self, messages: list) -> str:
         prompts = messages.copy()
         prompts.insert(0, SystemMessage(content=SHOW_RESULT_SYSTEM_PROMPT))
+
+        prompts = [i for i in prompts if type(i) != AIMessage]
 
         return (await self._gigachat.ainvoke(prompts)).content
     
