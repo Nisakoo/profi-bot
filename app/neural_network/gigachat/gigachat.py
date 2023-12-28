@@ -4,8 +4,7 @@ from langchain.schema import AIMessage, HumanMessage, SystemMessage
 from langchain.chat_models.gigachat import GigaChat
 
 from neural_network.base_neural_network import BaseNeuralNetwork
-
-from neural_network.constants.prompts import *
+from neural_network.gigachat.prompts import *
 
 
 class GigaChatNeuralNetwork(BaseNeuralNetwork):

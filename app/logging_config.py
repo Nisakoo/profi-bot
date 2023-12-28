@@ -18,7 +18,8 @@ LOGGING_CONFIG = {
         "file": {
             "class": "logging.FileHandler",
             "filename": "profi_bot.log",
-            "formatter": "base_formatter"
+            "formatter": "base_formatter",
+            "encoding": "utf-8"
         }
     },
     "loggers": {
