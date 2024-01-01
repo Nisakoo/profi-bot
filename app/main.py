@@ -25,18 +25,11 @@ if __name__ == "__main__":
         TelegramBot(
             os.environ["TELEGRAM_TOKEN"],
             [
-                {
-                    "test": GigaChatTest("ai_test", ai=GigaChatNeuralNetwork(os.environ["GIGACHAT_AUTH_KEY"])),
-                    "feedback": True,
-                    "save_data": False
-                },
-                {
-                    "test": Review("review"),
-                    "feedback": False,
-                    "save_data": True
-                }
+                GigaChatTest(ai=GigaChatNeuralNetwork(os.environ["GIGACHAT_AUTH_KEY"])),
+                Review()
             ],
-            db
+            db,
+            admin_id=os.environ["ADMIN_ID"]
         ).run()
     finally:
         asyncio.run(db.close())

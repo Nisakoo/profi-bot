@@ -4,8 +4,7 @@ from cache_storage.cache_storage import CacheStorage
 
 
 class Review(BaseTest):
-    def __init__(self, short_name, **kwargs) -> None:
-        self._short_name = short_name
+    def __init__(self, **kwargs) -> None:
         self._data: CacheStorage = CacheStorage()
 
     @property
@@ -14,11 +13,19 @@ class Review(BaseTest):
     
     @property
     def short_name(self) -> str:
-        return self._short_name
+        return SHORT_NAME
     
     @property
     def description(self) -> str:
         return TEST_DESCRIPTION
+    
+    @property
+    def feedback(self) -> bool:
+        return FEEDBACK
+    
+    @property
+    def save_data(self) -> bool:
+        return SAVE_DATA
     
     @property
     def questions_count(self) -> int:

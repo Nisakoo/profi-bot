@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod, abstractproperty
 
 class BaseTest(ABC):
     @abstractmethod
-    def __init__(self, short_name, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None:
         raise NotImplementedError()
     
     @abstractproperty
@@ -17,6 +17,14 @@ class BaseTest(ABC):
     
     @abstractproperty
     def description(self) -> str:
+        raise NotImplementedError()
+    
+    @abstractproperty
+    def feedback(self) -> bool:
+        raise NotImplementedError()
+    
+    @abstractproperty
+    def save_data(self) -> bool:
         raise NotImplementedError()
     
     @abstractproperty

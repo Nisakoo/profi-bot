@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from db.base_database import BaseDataBase
 
 class BaseBot(ABC):
-    def __init__(self, token: str, tests: list, db: BaseDataBase) -> None:
+    def __init__(self, token: str, tests: list, db: BaseDataBase, **kwargs) -> None:
         self._token = token
         self._tests = tests
         self._db = db

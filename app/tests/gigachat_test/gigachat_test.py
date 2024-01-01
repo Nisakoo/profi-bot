@@ -6,9 +6,8 @@ from tests.gigachat_test.description import *
 
 
 class GigaChatTest(BaseTest):
-    def __init__(self, short_name, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None:
         self._ai: BaseNeuralNetwork = kwargs["ai"]
-        self._short_name = short_name
 
         assert(type(self._ai) == GigaChatNeuralNetwork)
 
@@ -20,11 +19,21 @@ class GigaChatTest(BaseTest):
     
     @property
     def short_name(self) -> str:
-        return self._short_name
+        return SHORT_NAME
     
     @property
     def description(self) -> str:
-        return TEST_DESCRIPTION
+        return TEST_DESCRIPTION.format(
+            questions_count=QUESTIONS_COUNT
+        )
+    
+    @property
+    def feedback(self) -> bool:
+        return FEEDBACK
+    
+    @property
+    def save_data(self) -> bool:
+        return SAVE_DATA
     
     @property
     def questions_count(self) -> int:
