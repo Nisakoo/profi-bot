@@ -11,6 +11,10 @@ class BaseNeuralNetwork(ABC):
         raise NotImplementedError()
     
     @abstractmethod
+    async def ask_comment(self, message: str) -> str:
+        raise NotImplementedError()
+    
+    @abstractmethod
     async def ask_result(self, messages: list) -> str:
         raise NotImplementedError()
     

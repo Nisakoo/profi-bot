@@ -52,6 +52,9 @@ class GigaChatTest(BaseTest):
 
         if self._data.get_question_number(user_id) > 1:
             self._data.add_message(user_id, self._ai.user_msg(message))
+            comment = await self._ai.ask_comment(message)
+        else:
+            comment = FIRST_COMMENT_MSG
 
         response = await self._ai.ask_question(self._data.get_messages(user_id))
         self._data.add_message(user_id, self._ai.agent_msg(response))
@@ -61,7 +64,7 @@ class GigaChatTest(BaseTest):
         return QUESTION_TEMPLATE.format(
             questions_count=QUESTIONS_COUNT,
             question=self._data.get_question_number(user_id)-1,
-            question_content=response
+            question_content=(comment + "\n\n" + response)
         )
     
     async def show_result(self, **kwargs) -> str:

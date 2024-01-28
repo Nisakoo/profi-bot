@@ -1,4 +1,4 @@
-QUESTIONS_COUNT = 10
+QUESTIONS_COUNT = 5
 TEST_NAME = "Тест от GigaChat"
 SHORT_NAME = "ai_test"
 FEEDBACK = True
@@ -13,6 +13,6 @@ QUESTION_TEMPLATE = """{question}/{questions_count}. {question_content}"""
 RESULT_TEMPLATE = """Тестирование завершено! \
 Спасибо, что уделил мне время! Вот твой результат:
 
-{result_content}
+{result_content}"""
 
-Согласен ли ты с результатом тестрирования?"""
+FIRST_COMMENT_MSG = "Здравствуйте, очень хорошо, что вы задумываетесь о своем будущем. Вот мой первый вопрос:"
